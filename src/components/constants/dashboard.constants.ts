@@ -1,10 +1,10 @@
 import {
   Image,
-  LayoutDashboard,
   ListTodo,
   Settings2,
   TrendingDown,
   TrendingUp,
+  LayoutDashboard,
 } from "lucide-react";
 
 import { SidebarItem } from "@/types/sidebar.types";
@@ -107,7 +107,7 @@ export const sidebar_nav_links: SidebarItem[] = [
 
 export const mock_data: MockDataType[] = [
   {
-    id: 1,
+    id: "1",
     header: "Executive Summary & Objectives",
     type: "Executive Summary",
     status: "Done",
@@ -116,7 +116,7 @@ export const mock_data: MockDataType[] = [
     reviewer: "Eddie Lake",
   },
   {
-    id: 2,
+    id: "2",
     header: "Technical Architecture Overview",
     type: "Technical Approach",
     status: "In Progress",
@@ -125,7 +125,7 @@ export const mock_data: MockDataType[] = [
     reviewer: "Assign reviewer",
   },
   {
-    id: 3,
+    id: "3",
     header: "System Design & UI Wireframes",
     type: "Design",
     status: "Done",
@@ -134,7 +134,7 @@ export const mock_data: MockDataType[] = [
     reviewer: "Jamik Tashpulatov",
   },
   {
-    id: 4,
+    id: "4",
     header: "Key Core Capabilities & Features",
     type: "Capabilities",
     status: "Not Started",
@@ -143,7 +143,7 @@ export const mock_data: MockDataType[] = [
     reviewer: "Assign reviewer",
   },
   {
-    id: 5,
+    id: "5",
     header: "Compliance & Security Narrative",
     type: "Narrative",
     status: "In Progress",
@@ -152,12 +152,3 @@ export const mock_data: MockDataType[] = [
     reviewer: "Eddie Lake",
   },
 ];
-
-/* 
-{
-  id: "728ed52f",
-  amount: 100,
-  status: "pending",
-  email: "m@example.com",
-},
-*/

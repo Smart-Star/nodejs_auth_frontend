@@ -25,7 +25,7 @@ export function Gallery() {
 
   return (
     <Carousel
-      className='w-full overflow-hidden border border-accent/50 rounded-xl shadow-sm'
+      className='w-full overflow-hidden border border/70 rounded-xl shadow-sm'
       plugins={[plugin]}
       onMouseEnter={plugin.stop}
       onMouseLeave={plugin.reset}>

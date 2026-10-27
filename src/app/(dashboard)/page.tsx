@@ -1,9 +1,9 @@
 import { MockDataType } from "@/types/dashboard.types";
 import { Gallery } from "@/components/dashboard/gallery";
+import { columns } from "@/components/dashboard/columns";
+import { DataTable } from "@/components/dashboard/data-table";
 import { SectionCards } from "@/components/dashboard/section-cards";
 import { mock_data } from "@/components/constants/dashboard.constants";
-import { TestDataTable } from "@/components/dashboard/table-test/test-data-table";
-import { testColumns } from "@/components/dashboard/table-test/test-columns";
 
 async function getData(): Promise<MockDataType[]> {
   // Fetch data from your API here.
@@ -20,7 +20,7 @@ export default async function DashboardPage() {
       <SectionCards />
       <Gallery />
 
-      <TestDataTable columns={testColumns} data={data} />
+      <DataTable columns={columns} data={data} />
     </div>
   );
 }

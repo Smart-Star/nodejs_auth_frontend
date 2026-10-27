@@ -10,80 +10,86 @@ import {
 } from "@/components/ui/table";
 
 import {
-  useTable,
-  type ColumnDef,
-  type RowData,
-  type SortingState,
-  type ColumnFiltersState,
-} from "@tanstack/react-table";
-
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { features, type DataTableFeatures } from "./data-table-features";
-import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Label } from "../ui/label";
+} from "@/components/ui/select";
+
+import {
+  useTable,
+  type RowData,
+  type ColumnDef,
+  type SortingState,
+  type ColumnFiltersState,
+  type ColumnVisibilityState,
+} from "@tanstack/react-table";
+
+import { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { features, type DataTableFeatures } from "./data-table-features";
 
 interface DataTableProps<TData extends RowData> {
   columns: ColumnDef<DataTableFeatures, TData>[];
   data: TData[];
 }
 
+// export function DataTable<TData extends RowData & { id: string }>({
 export function DataTable<TData extends RowData>({
   columns,
   data,
 }: DataTableProps<TData>) {
   const [rowSelection, setRowSelection] = useState({});
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnVisibility, setColumnVisibility] =
+    useState<ColumnVisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   const table = useTable({
     features,
     data,
     columns,
+    onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    onRowSelectionChange: setRowSelection,
+    onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: setPagination,
     state: {
       sorting,
-      columnFilters,
+      columnVisibility,
       rowSelection,
+      columnFilters,
+      pagination,
     },
+    // getRowId: (row) => row.id.toString(),
   });
 
   return (
-    <div>
-      <div className='flex items-center py-4'>
-        <Input
-          placeholder='Filter emails...'
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className='max-w-sm'
-        />
-      </div>
-
-      <div className='overflow-hidden rounded-md border'>
+    <main className='space-y-3'>
+      <div className='overflow-hidden rounded-lg border'>
         <Table>
-          <TableHeader>
+          <TableHeader className='sticky top-0 z-10 bg-accent'>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className='hover:bg-accent'>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      className='font-bold'
+                      key={header.id}
+                      colSpan={header.colSpan}>
                       {header.isPlaceholder ? null : (
                         <table.FlexRender header={header} />
                       )}
@@ -93,11 +99,12 @@ export function DataTable<TData extends RowData>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className='**:data-[slot=table-cell]:first:w-'>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
+                  className='hover:bg-muted/30 data-[state=selected]:bg-muted/30'
                   data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -119,8 +126,7 @@ export function DataTable<TData extends RowData>({
         </Table>
       </div>
 
-      {/*  */}
-
+      {/* pagination */}
       <div className='flex items-center justify-between px-4'>
         <div className='hidden flex-1 text-sm text-muted-foreground lg:flex'>
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
@@ -190,31 +196,8 @@ export function DataTable<TData extends RowData>({
             </Button>
           </div>
         </div>
-
-        {/* pagination */}
-        {/* <div className='flex items-center justify-end space-x-2 py-4'>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}>
-          Previous
-        </Button>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}>
-          Next
-        </Button>
-      </div> */}
-
-        {/* show the number of selected rows */}
-        {/* <div className='flex-1 text-sm text-muted-foreground'>
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div> */}
       </div>
-    </div>
+      {/*  */}
+    </main>
   );
 }
