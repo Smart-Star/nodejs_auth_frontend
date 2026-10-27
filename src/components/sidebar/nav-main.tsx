@@ -63,7 +63,9 @@ export function NavMain({ isAdmin, navItems }: Props) {
           return (
             <SidebarMenuItem key={nav.title}>
               {hasSubItems ? (
-                <Collapsible defaultOpen={isCurrentActive} className='group'>
+                <Collapsible
+                  defaultOpen={isCurrentActive}
+                  className='group/collapsible'>
                   <CollapsibleTrigger
                     render={
                       <SidebarMenuButton
@@ -73,8 +75,7 @@ export function NavMain({ isAdmin, navItems }: Props) {
                     }>
                     {nav.icon && <nav.icon />}
                     <span>{nav.title}</span>
-                    {/* <ChevronRight className='ml-auto transition-transform duration-200 group/collapsible-data-[state=open]/collapsible:rotate-90' /> */}
-                    <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]:rotate-90' />
+                    <ChevronRight className='ml-auto transition-transform duration-200 group-data-open/collapsible:rotate-90' />
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
