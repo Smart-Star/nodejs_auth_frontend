@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 
 import { SidebarItem } from "@/types/sidebar.types";
+import { MockDataType } from "@/types/dashboard.types";
 
 export const section_cards = [
   {
@@ -103,3 +104,60 @@ export const sidebar_nav_links: SidebarItem[] = [
     ],
   },
 ];
+
+export const mock_data: MockDataType[] = [
+  {
+    id: 1,
+    header: "Executive Summary & Objectives",
+    type: "Executive Summary",
+    status: "Done",
+    target: "5",
+    limit: "10",
+    reviewer: "Eddie Lake",
+  },
+  {
+    id: 2,
+    header: "Technical Architecture Overview",
+    type: "Technical Approach",
+    status: "In Progress",
+    target: "12",
+    limit: "20",
+    reviewer: "Assign reviewer",
+  },
+  {
+    id: 3,
+    header: "System Design & UI Wireframes",
+    type: "Design",
+    status: "Done",
+    target: "8",
+    limit: "15",
+    reviewer: "Jamik Tashpulatov",
+  },
+  {
+    id: 4,
+    header: "Key Core Capabilities & Features",
+    type: "Capabilities",
+    status: "Not Started",
+    target: "3",
+    limit: "10",
+    reviewer: "Assign reviewer",
+  },
+  {
+    id: 5,
+    header: "Compliance & Security Narrative",
+    type: "Narrative",
+    status: "In Progress",
+    target: "6",
+    limit: "12",
+    reviewer: "Eddie Lake",
+  },
+];
+
+/* 
+{
+  id: "728ed52f",
+  amount: 100,
+  status: "pending",
+  email: "m@example.com",
+},
+*/

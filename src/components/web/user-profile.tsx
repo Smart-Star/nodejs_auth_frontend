@@ -16,7 +16,7 @@ export async function UserProfile() {
       </div>
 
       <Avatar
-        className='border-2 border-primary rounded-full'
+        className='border-2 border-accent rounded-full'
         size={40}
         name={user.userId} // Uses the userId as the seed for the design
         variant='marble' // Options: "marble", "beam", "pixel", "sunset", "ring", "bauhaus"

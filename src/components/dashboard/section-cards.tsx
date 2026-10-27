@@ -14,7 +14,7 @@ export function SectionCards() {
   return (
     <div className='w-full grid grid-cols-1 gap-6 md:grid-cols-4'>
       {section_cards.map((card) => (
-        <Card key={card.title} className='@container/card'>
+        <Card key={card.title} className='@container/card shadow-sm'>
           <CardHeader>
             <CardDescription>{card.title}</CardDescription>
             <CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>

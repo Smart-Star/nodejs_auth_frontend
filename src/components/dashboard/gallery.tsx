@@ -4,8 +4,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 
 import Image from "next/image";
@@ -16,14 +14,18 @@ import { carousel_images } from "../constants/dashboard.constants";
 
 export function Gallery() {
   const plugin = useMemo(
-    () => Autoplay({ delay: 4000, stopOnInteraction: true }),
+    () =>
+      Autoplay({
+        delay: 4000,
+        stopOnInteraction: false, // Prevents stoping autoplay on drag/click
+        stopOnMouseEnter: true, // pauses autoplay while hovering
+      }),
     [],
   );
 
   return (
-    // <Carousel className='w-full max-w-[12rem] sm:max-w-xs'>
     <Carousel
-      className='w-full overflow-hidden'
+      className='w-full overflow-hidden border border-accent/50 rounded-xl shadow-sm'
       plugins={[plugin]}
       onMouseEnter={plugin.stop}
       onMouseLeave={plugin.reset}>
@@ -44,8 +46,8 @@ export function Gallery() {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className='left-8' />
-      <CarouselNext className='right-8' />
+      {/* <CarouselPrevious className='left-8' />
+      <CarouselNext className='right-8' /> */}
     </Carousel>
   );
 }
