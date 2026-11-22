@@ -9,6 +9,7 @@ import {
 
 import { SidebarItem } from "@/types/sidebar.types";
 import { MockDataType } from "@/types/dashboard.types";
+import { subMinutes, subHours, subDays } from "date-fns";
 
 export const section_cards = [
   {
@@ -285,5 +286,23 @@ export const mock_data: MockDataType[] = [
     target: "1",
     limit: "3",
     reviewer: "Emily Whalen",
+  },
+];
+
+export const tasks_data = [
+  {
+    id: "1",
+    description: "Reach out to the project manager",
+    created_at: subMinutes(new Date(), 5).toISOString(), // Exactly 5 minutes ago
+  },
+  {
+    id: "2",
+    description: "Pick up materials for the kids painting",
+    created_at: subHours(new Date(), 2).toISOString(), // 2 hours ago
+  },
+  {
+    id: "3",
+    description: "Buy groceries on the way home",
+    created_at: subDays(new Date(), 1).toISOString(), // 1 day ago
   },
 ];

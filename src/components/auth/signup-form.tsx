@@ -1,22 +1,5 @@
 "use client";
 
-import * as z from "zod";
-import Link from "next/link";
-import Image from "next/image";
-import { format } from "date-fns";
-import { useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "@/components/ui/toast";
-import { Input } from "@/components/ui/input";
-import { SubmitButton } from "./submit-button";
-import { Button } from "@/components/ui/button";
-import { GoogleIcon } from "../icons/google-icon";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signUpSchema } from "@/validation/auth.schema";
-import { Card, CardContent } from "@/components/ui/card";
-import { signup_form_control } from "../constants/auth.constants";
-
 import {
   Field,
   FieldError,
@@ -25,6 +8,24 @@ import {
   FieldSeparator,
   FieldDescription,
 } from "@/components/ui/field";
+
+import * as z from "zod";
+import Link from "next/link";
+import Image from "next/image";
+import { format } from "date-fns";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/toast";
+import { SubmitButton } from "./submit-button";
+import { Button } from "@/components/ui/button";
+import { GoogleIcon } from "../icons/google-icon";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signUpSchema } from "@/validation/auth.schema";
+import { registerAction } from "@/actions/auth.actions";
+import { Card, CardContent } from "@/components/ui/card";
+import { signup_form_control } from "../constants/auth.constants";
 
 export function SignupForm() {
   const router = useRouter();
@@ -38,13 +39,25 @@ export function SignupForm() {
     },
   });
 
-  function onSubmit() {
+  function onSubmit(data: z.infer<typeof signUpSchema>) {
     startTransition(async () => {
+      const result = await registerAction(data);
+      if (!result.success) {
+        toast.add({
+          type: "error",
+          title: result.message,
+        });
+        return;
+      }
+
       toast.add({
         title: "Account created successfully.",
         description: format(new Date(), "EEEE, MMMM d 'at' h:mm a"),
+        // description: `You can now log in`,
       });
     });
+
+    router.push("/login");
   }
 
   return (
@@ -73,6 +86,7 @@ export function SignupForm() {
                       <Input
                         {...field}
                         id={formControl.id}
+                        type={formControl.type}
                         aria-invalid={fieldState.invalid}
                         placeholder={formControl.placeholder}
                       />

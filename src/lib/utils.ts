@@ -1,4 +1,11 @@
+import { format } from "date-fns";
+
 export { cn } from "cn";
+
+export function formatDateTime(date: string): string {
+  return format(new Date(date), "dd/MM/yyyy");
+  // return format(new Date(date), "dd/MM/yyyy, h:mmaaa");
+}
 
 // format raw paths nicely if not in nav_links
 export function formatPathToTitle(pathname: string): string {

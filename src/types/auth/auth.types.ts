@@ -2,6 +2,7 @@ import {
   signUpSchema,
   loginSchema,
   resetPasswordSchema,
+  forgotPasswordSchema,
 } from "@/validation/auth.schema";
 
 export interface SignupFormType {
@@ -13,6 +14,13 @@ export interface SignupFormType {
 
 export interface LoginFormType {
   id: keyof typeof loginSchema.shape;
+  type: string;
+  title: string;
+  placeholder: string;
+}
+
+export interface ForgotPasswordFormType {
+  id: keyof typeof forgotPasswordSchema.shape;
   type: string;
   title: string;
   placeholder: string;

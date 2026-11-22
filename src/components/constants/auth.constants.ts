@@ -1,10 +1,12 @@
 import {
   LoginFormType,
-  ResetPasswordFormType,
   SignupFormType,
+  ResetPasswordFormType,
+  ForgotPasswordFormType,
 } from "@/types/auth/auth.types";
 
 export const PASSWORD_LENGTH = 6;
+export const COUNTDOWN_TIMER_LENGTH = 60;
 
 export const signup_form_control: SignupFormType[] = [
   {
@@ -36,13 +38,16 @@ export const login_form_control: LoginFormType[] = [
   },
 ];
 
-export const reset_password_form_control: ResetPasswordFormType[] = [
+export const forgot_password_form_control: ForgotPasswordFormType[] = [
   {
-    id: "oldPassword",
-    type: "old_password",
-    title: "Old password",
-    placeholder: "Enter your old password",
+    id: "email",
+    type: "email",
+    title: "Email",
+    placeholder: "yourmail@example.com",
   },
+];
+
+export const reset_password_form_control: ResetPasswordFormType[] = [
   {
     id: "newPassword",
     type: "password",
@@ -50,9 +55,9 @@ export const reset_password_form_control: ResetPasswordFormType[] = [
     placeholder: "Create a new password",
   },
   {
-    id: "confirmPassword",
+    id: "repeatNewPassword",
     type: "password",
-    title: "Confirm password",
+    title: "Repeat new password",
     placeholder: "Retype new password",
   },
 ];

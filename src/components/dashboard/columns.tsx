@@ -1,20 +1,16 @@
 "use client";
 
-import { z } from "zod";
-
+import { formatDateTime } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { TableActions } from "./table-actions";
 import { CircleCheck, Loader } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { taskSchema } from "@/validation/task.schema";
+import { SupportTasks } from "@/types/tasks.types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { type DataTableFeatures } from "./data-table-features";
 
 // Use `accessor` for data columns and `display` for columns without one.
-const columnHelper = createColumnHelper<
-  DataTableFeatures,
-  z.infer<typeof taskSchema>
->();
+const columnHelper = createColumnHelper<DataTableFeatures, SupportTasks>();
 
 export const columns = columnHelper.columns([
   columnHelper.display({
@@ -52,41 +48,56 @@ export const columns = columnHelper.columns([
     // header: () => null,
     header: () => <div className='text-center'>S/N</div>,
     cell: ({ row }) => {
-      return <div className='text-center'>{row.original.id}</div>;
+      return <div className='text-center'>{row.index + 1}</div>;
     },
   }),
 
-  columnHelper.accessor("header", {
-    header: "Header",
+  columnHelper.accessor("title", {
+    header: "Title",
     cell: ({ row }) => {
-      return row.original.header;
+      return row.original.title;
     },
     enableHiding: false,
-  }),
-
-  columnHelper.accessor("type", {
-    header: "Section Type",
-    cell: ({ row }) => (
-      <div className='w-32'>
-        <Badge variant='outline' className='p-2.5 text-muted-foreground'>
-          {row.original.type}
-        </Badge>
-      </div>
-    ),
   }),
 
   columnHelper.accessor("status", {
     header: "Status",
     cell: ({ row }) => (
-      <Badge variant='outline' className='p-2.5 text-muted-foreground'>
-        {row.original.status === "Done" ? (
+      <Badge
+        variant='outline'
+        className='p-2.5 text-muted-foreground first-letter:uppercase'>
+        {row.original.status === "RESOLVED" ? (
           <CircleCheck className='text-green-500 dark:text-green-400' />
-        ) : (
+        ) : row.original.status === "IN_PROGRESS" ? (
           <Loader />
+        ) : (
+          ""
         )}
-        {row.original.status}
+        {row.original.status
+          .toLowerCase()
+          .replaceAll("_", " ")
+          .replace(/^\w/, (char) => char.toUpperCase())}
+        {/* {row.original.status
+          .toLowerCase()
+          .replace(/^\w/, (char) => char.toUpperCase())} */}
       </Badge>
     ),
+  }),
+
+  columnHelper.accessor("created_at", {
+    header: "Created At",
+    cell: ({ row }) => {
+      return formatDateTime(row.original.created_at);
+    },
+    enableHiding: false,
+  }),
+
+  columnHelper.accessor("updated_at", {
+    header: "Updated At",
+    cell: ({ row }) => {
+      return formatDateTime(row.original.updated_at);
+    },
+    enableHiding: false,
   }),
 
   columnHelper.display({

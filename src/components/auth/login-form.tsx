@@ -1,5 +1,14 @@
 "use client";
 
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSeparator,
+  FieldDescription,
+} from "@/components/ui/field";
+
 import * as z from "zod";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,15 +26,6 @@ import { loginSchema } from "@/validation/auth.schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { login_form_control } from "../constants/auth.constants";
 
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSeparator,
-  FieldDescription,
-} from "@/components/ui/field";
-
 export function LoginForm() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -41,11 +41,10 @@ export function LoginForm() {
   async function onSubmit(data: z.infer<typeof loginSchema>) {
     startTransition(async () => {
       const result = await loginAction(data);
-
       if (result.success) {
         toast.add({
           title: "Account logged in successfully.",
-          description: `welcome @${data.email}`,
+          description: `welcome ${data.email}`,
         });
 
         router.push("/");
@@ -85,7 +84,7 @@ export function LoginForm() {
                           {formControl.title}
                         </FieldLabel>
                         <Link
-                          href='/reset-password'
+                          href='/forgot-password'
                           className={
                             formControl.id !== "password"
                               ? "hidden"
@@ -97,6 +96,7 @@ export function LoginForm() {
                       <Input
                         {...field}
                         id={formControl.id}
+                        type={formControl.type}
                         aria-invalid={fieldState.invalid}
                         placeholder={formControl.placeholder}
                       />

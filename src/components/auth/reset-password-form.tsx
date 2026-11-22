@@ -1,19 +1,5 @@
 "use client";
 
-import * as z from "zod";
-import Link from "next/link";
-import Image from "next/image";
-import { useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "@/components/ui/toast";
-import { Input } from "@/components/ui/input";
-import { SubmitButton } from "./submit-button";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, CardContent } from "@/components/ui/card";
-import { resetPasswordSchema } from "@/validation/auth.schema";
-import { reset_password_form_control } from "../constants/auth.constants";
-
 import {
   Field,
   FieldError,
@@ -22,24 +8,58 @@ import {
   FieldDescription,
 } from "@/components/ui/field";
 
+import * as z from "zod";
+import Link from "next/link";
+import Image from "next/image";
+import { useTransition } from "react";
+import { toast } from "@/components/ui/toast";
+import { Input } from "@/components/ui/input";
+import { SubmitButton } from "./submit-button";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Card, CardContent } from "@/components/ui/card";
+import { useRouter, useSearchParams } from "next/navigation";
+import { resetPasswordAction } from "@/actions/auth.actions";
+import { resetPasswordSchema } from "@/validation/auth.schema";
+import { reset_password_form_control } from "../constants/auth.constants";
+
 export function ResetPasswordForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+
+  // Extract token and email from URL parameterss
+  const tokenParam = searchParams.get("token") || "";
+  const token = tokenParam.split("email=")[0];
+  const email = searchParams.get("email") || "";
 
   const form = useForm<z.infer<typeof resetPasswordSchema>>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      oldPassword: "",
+      email: email,
+      rawToken: token,
       newPassword: "",
+      repeatNewPassword: "",
     },
   });
 
-  function onSubmit() {
+  async function onSubmit(data: z.infer<typeof resetPasswordSchema>) {
     startTransition(async () => {
+      const result = await resetPasswordAction(data);
+      if (!result.success) {
+        toast.add({
+          type: "error",
+          title: result.message,
+        });
+        return;
+      }
+
       toast.add({
-        title: "Password updated successfully.",
+        title: "Password changed successfully.",
         description: "You can now login with your new password",
       });
+
+      router.push("/login");
     });
   }
 
@@ -52,7 +72,7 @@ export function ResetPasswordForm() {
               <div className='flex flex-col items-center gap-2 text-center'>
                 <h1 className='text-2xl font-bold'>Create a new password</h1>
                 <p className='text-sm text-balance text-muted-foreground'>
-                  Complete the form below to change your password
+                  Enter new password below to complete the reset process
                 </p>
               </div>
 
@@ -69,6 +89,7 @@ export function ResetPasswordForm() {
                       <Input
                         {...field}
                         id={formControl.id}
+                        type={formControl.type}
                         aria-invalid={fieldState.invalid}
                         placeholder={formControl.placeholder}
                       />
@@ -110,6 +131,10 @@ export function ResetPasswordForm() {
         By clicking continue, you agree to our <a href='#'>Terms of Service</a>{" "}
         and <a href='#'>Privacy Policy</a>.
       </FieldDescription>
+
+      <div className='bg-primary/10 text-foreground'>
+        {/* <p className='font-bold text-white text-2xl'>{form.getValues()}</p> */}
+      </div>
     </div>
   );
 }

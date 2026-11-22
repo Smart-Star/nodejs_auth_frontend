@@ -1,25 +1,24 @@
-import { getSession } from "@/lib/session";
 import Avatar from "boring-avatars";
+import { UserJwtPayload } from "@/types/user.types";
 
-export async function UserProfile() {
-  const user = await getSession();
-
-  if (!user) return null;
+export function UserProfile({ email, role, userId }: UserJwtPayload) {
+  if (!email && !role && userId) return null;
 
   return (
-    <div className='flex items-center gap-3 p-2 rounded-lg'>
+    <div className='flex items-center justify-center gap-3'>
       <div className='flex flex-col overflow-hidden'>
-        <span className='font-medium text-sm truncate'>{user.email}</span>
-        <span className='text-xs text-muted-foreground uppercase text-right'>
-          {user.role}
+        <span className='font-semibold text-sm truncate'>{email}</span>
+        <span className='bg-primary w-fit ml-auto rounded-full px-2 text-xs text-white lowercase text-right'>
+          {role}
         </span>
       </div>
 
       <Avatar
         className='border-2 border-accent rounded-full'
-        size={40}
-        name={user.userId} // Uses the userId as the seed for the design
-        variant='marble' // Options: "marble", "beam", "pixel", "sunset", "ring", "bauhaus"
+        square
+        size={35}
+        name={userId} // Uses the userId to generate the gradient
+        variant='marble' // marble, beam, pixel, sunset, ring, bauhaus
       />
     </div>
   );
